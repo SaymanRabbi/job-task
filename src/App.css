@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap');
+
+body {
+  font-family: 'Roboto', sans-serif;
+  
+}
+
+.button:before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color:  #0D01E5;
+    transition: all 1s;
+    z-index: -1;
+    transform: translateX(-100%);
+  }
+  .button:hover:before{
+    transform: translateX(0%);
+  }
+  

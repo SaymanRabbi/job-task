@@ -1,11 +1,13 @@
 import './App.css'
 import AddDataForm from './Components/AddDataForm'
+import Navbar from './Components/Navbar'
 
 function App() {
 
   return (
     <div>
-        <AddDataForm />
+      <Navbar />
+      <AddDataForm />
     </div>
   )
 }
