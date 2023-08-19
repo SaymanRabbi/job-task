@@ -2,17 +2,22 @@ import React, { useEffect, useState } from 'react';
 import Data from './Data';
 
 const AddDataForm = () => {
+    const [fullName,setFullName]=useState('');
     const [name,setName]=useState('Select Category');
     const [value,setValue]=useState('Select Sub Category');
+    const [error,setError]=useState('');
     const [agree,setAgree]=useState(
         name === 'Select Category' || value === 'Select Sub Category' ? false : true
         );
     const [checked,setChecked]=useState(false);
     const HandelChange = (e) => {
         setName(e.target.value);
+        
     }
     const HandelValueChange = (e) => {
         setValue(e.target.value);
+
+
     }
     const HandelAgree = () => {
         setChecked(!checked);
@@ -23,6 +28,11 @@ const AddDataForm = () => {
 }
     const HandelSubmit = (e) => {
         e.preventDefault();
+        const fullName = e.target.name.value
+        if(fullName === '' || fullName.trim().length<3){
+            setError(true)
+            return
+        }
     }
     useEffect(()=>{
         Data.map((item)=>{
@@ -30,15 +40,17 @@ const AddDataForm = () => {
                 setValue(item.value[0]);
             }
         })
-       
+        if(fullName != '' && fullName.trim().length>=3){
+            setError(false)
+        }
             if((name === 'Select Category' || value === 'Select Sub Category') && (checked)){
                 return setAgree(false)
             }
             if((name !== 'Select Category' || value !== 'Select Sub Category') && (checked)){
                 return setAgree(true)
             }
-        
-    },[name,value])
+          
+    },[name,value,fullName])
     return (
         <div className='w-[100%] bg-gradient-to-tr from-[#C4DAFE] to-[#EEF5FF]'>
             <div className='px-8 py-8'>
@@ -52,7 +64,13 @@ const AddDataForm = () => {
                         {/* --------Input for name------ */}
                         <div className='mt-8'>
                             <label htmlFor="name" className=' block font-[450]'>What's Your Full Name?</label>
-                            <input type="text" id='name' className='mt-8 w-full outline-none focus:border-b-2 focus:border-blue-800' placeholder='Your Full Name...'/>
+                            <input type="text" name='name' id='name' className={`
+                            mt-8 w-full outline-none focus:border-b-2 
+                            ${error?"border-red-500":"focus:border-blue-800"}
+                            `} placeholder='Your Full Name...'
+                            onChange={(e)=>setFullName(e.target.value)}
+                            />
+                            {error && <span className='text-red-500 text-sm mt-2'>Please enter your full name</span>}
                          </div>
                         {/* --------Input for name------ */}
                         {/* --------Input for select ocopotion------ */}
