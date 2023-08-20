@@ -23,7 +23,7 @@ const ViewData = () => {
             subCategory:value,
             category:category
         }
-        const res = await axios.put('http://localhost:5000/api/edit',{
+        const res = await axios.put('https://job-task-backend-sooty.vercel.app/api/edit',{
             Data
         })
         setFilterData(Data);
@@ -36,7 +36,7 @@ const ViewData = () => {
 
         const res = async () => {
             setLoading(true)
-            const res = await axios.get('http://localhost:5000/api/get')
+            const res = await axios.get('https://job-task-backend-sooty.vercel.app/api/get')
             GetData(res.data.data)
             setLoading(false)
         }

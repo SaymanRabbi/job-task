@@ -48,7 +48,7 @@ const AddDataForm = () => {
             subCategory:value,
             agree:checked,
         }
-       const res =   await axios.post('http://localhost:5000/api/add',Data)
+       const res =   await axios.post('https://job-task-backend-sooty.vercel.app/api/add',Data)
   
         setData(Data);
         navigate('/view')
@@ -68,7 +68,7 @@ const AddDataForm = () => {
     // -------get data -------
     useEffect(()=>{
         const res = async () => {
-            const res = await axios.get('http://localhost:5000/api/get')
+            const res = await axios.get('https://job-task-backend-sooty.vercel.app/api/get')
          
             GetData(res.data.data)
         }
