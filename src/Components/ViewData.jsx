@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { useStore } from '../Store';
 import Data from './Data';
 
@@ -20,6 +21,7 @@ const ViewData = () => {
             category:category
         }
         setFilterData(Data);
+        toast.success('Edit Successfully')
         setEdit(!edit);
          
     }
