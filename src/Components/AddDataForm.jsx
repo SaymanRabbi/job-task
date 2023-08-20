@@ -9,8 +9,6 @@ const AddDataForm = () => {
     const [error,setError]=useState('');
     const [checked,setChecked]=useState(false);
     const setData = useStore((state)=>state.setData);
-    const DataAdd = useStore((state)=>state.Data);
-    console.log(DataAdd)
     const [agree,setAgree]=useState(
         name === 'Select Category' || value === 'Select Sub Category' ? false : true
         );
@@ -50,11 +48,6 @@ const AddDataForm = () => {
     }
     // -----Submit the form
     useEffect(()=>{
-        Data.map((item)=>{
-            if(item.name === name){
-                setValue(item.value[0]);
-            }
-        })
         if(fullName != '' && fullName.trim().length>=3){
             setError(false)
         }
