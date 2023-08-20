@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../Store';
@@ -10,7 +11,7 @@ const AddDataForm = () => {
     const [error,setError]=useState('');
     const [checked,setChecked]=useState(false);
     const setData = useStore((state)=>state.setData);
-    const GetData=useStore((state)=>state.Data);
+    const GetData=useStore((state)=>state.getData);
     const navigate = useNavigate();
     const [agree,setAgree]=useState(
         name === 'Select Category' || value === 'Select Sub Category' ? false : true
@@ -34,7 +35,7 @@ const AddDataForm = () => {
     }
     // -----Agree to terms and conditions
     // -----Submit the form
-    const HandelSubmit = (e) => {
+    const HandelSubmit =async (e) => {
         e.preventDefault();
         const fullName = e.target.name.value
         if(fullName === '' || fullName.trim().length<3){
@@ -46,8 +47,9 @@ const AddDataForm = () => {
             category:name,
             subCategory:value,
             agree:checked,
-            id:Math.random().toString(36) + new Date().getMilliseconds()
         }
+       const res =   await axios.post('http://localhost:5000/api/add',Data)
+  
         setData(Data);
         navigate('/view')
     }
@@ -62,7 +64,17 @@ const AddDataForm = () => {
             if((name !== 'Select Category' || value !== 'Select Sub Category') && (checked)){
                 return setAgree(true)
             }
-    },[name,value,fullName,GetData])
+    },[name,value,fullName])
+    // -------get data -------
+    useEffect(()=>{
+        const res = async () => {
+            const res = await axios.get('http://localhost:5000/api/get')
+         
+            GetData(res.data.data)
+        }
+        res()
+    },[])
+    // -------get data -------
     return (
         <div className='w-[100%] bg-gradient-to-tr from-[#C4DAFE] to-[#EEF5FF]'>
             <div className='px-8 py-8'>
@@ -77,7 +89,8 @@ const AddDataForm = () => {
                         <div className='mt-8'>
                             <label htmlFor="name" className=' block font-[450]'>What's Your Full Name?</label>
                             <input type="text" name='name' id='name' className={`
-                            mt-8 w-full outline-none focus:border-b-2 
+                            mt-8 w-full outline-none focus:border-b-2
+                             border-transparent
                             ${error?"border-red-500":"focus:border-blue-800"}
                             `} placeholder='Your Full Name...'
                             onChange={(e)=>setFullName(e.target.value)}

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useStore } from '../Store';
 import Data from './Data';
@@ -8,23 +9,40 @@ const ViewData = () => {
     const setFilterData = useStore((state)=>state.setFilterData);
     const [inDex,setIndex]=useState(0);
     const [edit,setEdit]=useState(false);
+    const [loading,setLoading]=useState(false);
     const [value,setValue]=useState('');
     const [name,setName]=useState('');
+    const GetData = useStore((state)=>state.getData);
     const EditData = ()=>{
         setEdit(!edit);
     }
-    const SaveData = (id,category)=>{
+    const SaveData = async(id,category)=>{
         const Data = {
-            id:id,
+            _id:id,
             name:name,
             subCategory:value,
             category:category
         }
+        const res = await axios.put('http://localhost:5000/api/edit',{
+            Data
+        })
         setFilterData(Data);
         toast.success('Edit Successfully')
         setEdit(!edit);
          
     }
+    // -------get data -------
+    useEffect(()=>{
+
+        const res = async () => {
+            setLoading(true)
+            const res = await axios.get('http://localhost:5000/api/get')
+            GetData(res.data.data)
+            setLoading(false)
+        }
+        res()
+    },[])
+    // -------get data -------
     return (
         <div className='w-[100%] bg-gradient-to-tr from-[#C4DAFE] to-[#EEF5FF]'>
             <div className='px-8 py-8'>
@@ -50,7 +68,7 @@ const ViewData = () => {
         </thead>
         <tbody>
             {
-                Datas.length === 0 ? <h2 className=' mt-8 text-red-500 font-bold uppercase text-center w-full mx-auto'>
+                Datas.length === 0 && !loading   ? <h2 className=' mt-8 text-red-500 font-bold uppercase text-center w-full mx-auto'>
                      No Data Found
                 </h2> :  
                     Datas.map((item,index)=>
@@ -94,7 +112,7 @@ const ViewData = () => {
                                 >
                                     Edit
                                 </button> : edit && index === inDex ? <button className=' text-white bg-red-500 px-2 py-1 rounded-md'
-                            onClick={()=>SaveData(item.id,item.category)}
+                            onClick={()=>SaveData(item._id,item.category)}
                             >
                                 save
                             </button> : <button className=' text-white bg-red-500 px-2 py-1 rounded-md'
