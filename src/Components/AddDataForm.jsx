@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useStore } from '../Store';
 import Data from './Data';
 
@@ -9,6 +10,8 @@ const AddDataForm = () => {
     const [error,setError]=useState('');
     const [checked,setChecked]=useState(false);
     const setData = useStore((state)=>state.setData);
+    const GetData=useStore((state)=>state.Data);
+    const navigate = useNavigate();
     const [agree,setAgree]=useState(
         name === 'Select Category' || value === 'Select Sub Category' ? false : true
         );
@@ -42,9 +45,11 @@ const AddDataForm = () => {
             name:fullName,
             category:name,
             subCategory:value,
-            agree:checked
+            agree:checked,
+            id:Math.random().toString(36) + new Date().getMilliseconds()
         }
         setData(Data);
+        navigate('/view')
     }
     // -----Submit the form
     useEffect(()=>{
@@ -57,8 +62,7 @@ const AddDataForm = () => {
             if((name !== 'Select Category' || value !== 'Select Sub Category') && (checked)){
                 return setAgree(true)
             }
-          
-    },[name,value,fullName])
+    },[name,value,fullName,GetData])
     return (
         <div className='w-[100%] bg-gradient-to-tr from-[#C4DAFE] to-[#EEF5FF]'>
             <div className='px-8 py-8'>
